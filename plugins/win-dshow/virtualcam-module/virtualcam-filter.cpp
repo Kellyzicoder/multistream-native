@@ -32,7 +32,7 @@ VCamFilter::VCamFilter() : OutputFilter()
 	}
 
 #ifdef _WIN64
-	const wchar_t *obs_process = L"obs64.exe";
+	const wchar_t *obs_process = L"multistream64.exe";
 #else
 	const wchar_t *obs_process = L"obs32.exe";
 #endif
