@@ -173,6 +173,9 @@ void OBSBasic::ShowWhatsNew(const QString &url)
 
 void OBSBasic::TimedCheckForUpdates()
 {
+	// Multistream: OBS's own updater would replace this app with OBS Studio, so it never runs.
+	// Multistream gets its own updates.
+#if 0
 	if (App()->IsUpdaterDisabled()) {
 		return;
 	}
@@ -197,6 +200,7 @@ void OBSBasic::TimedCheckForUpdates()
 	if (secs > UPDATE_CHECK_INTERVAL) {
 		CheckForUpdates(false);
 	}
+#endif
 #endif
 }
 

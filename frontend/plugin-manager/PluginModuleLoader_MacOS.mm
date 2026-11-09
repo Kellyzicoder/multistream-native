@@ -52,9 +52,9 @@
 using State = OBS::PluginManager::State;
 using ModuleType = obs_runtime_module_type;
 
-constexpr std::string_view kPluginPathSuffix {"obs-studio/plugins/%module%.plugin"};
+constexpr std::string_view kPluginPathSuffix {"multistream/plugins/%module%.plugin"};
 constexpr std::string_view kUserPluginPathSuffix {"/%module%.plugin"};
-constexpr std::string_view kLegacyPluginPathSuffix {"obs-studio/plugins/%module%"};
+constexpr std::string_view kLegacyPluginPathSuffix {"multistream/plugins/%module%"};
 
 #ifdef __aarch64__
 constexpr bool kIsAppleSilicon = true;

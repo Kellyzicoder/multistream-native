@@ -435,21 +435,21 @@ static bool MakeUserDirs()
 {
 	char path[512];
 
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/basic") <= 0) {
+	if (GetAppConfigPath(path, sizeof(path), "multistream/basic") <= 0) {
 		return false;
 	}
 	if (!do_mkdir(path)) {
 		return false;
 	}
 
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/logs") <= 0) {
+	if (GetAppConfigPath(path, sizeof(path), "multistream/logs") <= 0) {
 		return false;
 	}
 	if (!do_mkdir(path)) {
 		return false;
 	}
 
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/profiler_data") <= 0) {
+	if (GetAppConfigPath(path, sizeof(path), "multistream/profiler_data") <= 0) {
 		return false;
 	}
 	if (!do_mkdir(path)) {
@@ -457,7 +457,7 @@ static bool MakeUserDirs()
 	}
 
 #ifdef _WIN32
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/crashes") <= 0) {
+	if (GetAppConfigPath(path, sizeof(path), "multistream/crashes") <= 0) {
 		return false;
 	}
 	if (!do_mkdir(path)) {
@@ -465,14 +465,14 @@ static bool MakeUserDirs()
 	}
 #endif
 
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/updates") <= 0) {
+	if (GetAppConfigPath(path, sizeof(path), "multistream/updates") <= 0) {
 		return false;
 	}
 	if (!do_mkdir(path)) {
 		return false;
 	}
 
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/plugin_config") <= 0) {
+	if (GetAppConfigPath(path, sizeof(path), "multistream/plugin_config") <= 0) {
 		return false;
 	}
 	if (!do_mkdir(path)) {
@@ -482,9 +482,9 @@ static bool MakeUserDirs()
 	return true;
 }
 
-constexpr std::string_view OBSProfileSubDirectory = "obs-studio/basic/profiles";
-constexpr std::string_view OBSScenesSubDirectory = "obs-studio/basic/scenes";
-constexpr std::string_view OBSPluginManagerSubDirectory = "obs-studio/plugin_manager";
+constexpr std::string_view OBSProfileSubDirectory = "multistream/basic/profiles";
+constexpr std::string_view OBSScenesSubDirectory = "multistream/basic/scenes";
+constexpr std::string_view OBSPluginManagerSubDirectory = "multistream/plugin_manager";
 
 static bool MakeUserProfileDirs()
 {
@@ -565,7 +565,7 @@ bool OBSApp::InitGlobalConfig()
 {
 	char path[512];
 
-	int len = GetAppConfigPath(path, sizeof(path), "obs-studio/global.ini");
+	int len = GetAppConfigPath(path, sizeof(path), "multistream/global.ini");
 	if (len <= 0) {
 		return false;
 	}
@@ -883,7 +883,7 @@ bool LoadBranchesFile(vector<UpdateBranch> &out)
 	string error;
 	string branchesText;
 
-	BPtr<char> branchesFilePath = GetAppConfigPathPtr("obs-studio/updates/branches.json");
+	BPtr<char> branchesFilePath = GetAppConfigPathPtr("multistream/updates/branches.json");
 
 	QFile branchesFile(branchesFilePath.Get());
 	if (!branchesFile.open(QIODevice::ReadOnly)) {
@@ -1021,7 +1021,7 @@ static void move_basic_to_profiles(void)
 {
 	char path[512];
 
-	if (GetAppConfigPath(path, 512, "obs-studio/basic") <= 0) {
+	if (GetAppConfigPath(path, 512, "multistream/basic") <= 0) {
 		return;
 	}
 
@@ -1032,7 +1032,7 @@ static void move_basic_to_profiles(void)
 	}
 
 	const std::filesystem::path profilesPath =
-		App()->userProfilesLocation / std::filesystem::u8path("obs-studio/basic/profiles");
+		App()->userProfilesLocation / std::filesystem::u8path("multistream/basic/profiles");
 
 	if (std::filesystem::exists(profilesPath)) {
 		return;
@@ -1085,7 +1085,7 @@ static void move_basic_to_scene_collections(void)
 {
 	char path[512];
 
-	if (GetAppConfigPath(path, 512, "obs-studio/basic") <= 0) {
+	if (GetAppConfigPath(path, 512, "multistream/basic") <= 0) {
 		return;
 	}
 
@@ -1096,7 +1096,7 @@ static void move_basic_to_scene_collections(void)
 	}
 
 	const std::filesystem::path sceneCollectionPath =
-		App()->userScenesLocation / std::filesystem::u8path("obs-studio/basic/scenes");
+		App()->userScenesLocation / std::filesystem::u8path("multistream/basic/scenes");
 
 	if (std::filesystem::exists(sceneCollectionPath)) {
 		return;
@@ -1220,7 +1220,7 @@ static bool StartupOBS(const char *locale, profiler_name_store_t *store)
 {
 	char path[512];
 
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/plugin_config") <= 0) {
+	if (GetAppConfigPath(path, sizeof(path), "multistream/plugin_config") <= 0) {
 		return false;
 	}
 
@@ -1462,14 +1462,14 @@ void OBSApp::uploadLastAppLog() const
 {
 	OBSBasic *basicWindow = static_cast<OBSBasic *>(GetMainWindow());
 
-	basicWindow->UploadLog("obs-studio/logs", GetLastLog(), OBS::LogFileType::LastAppLog);
+	basicWindow->UploadLog("multistream/logs", GetLastLog(), OBS::LogFileType::LastAppLog);
 }
 
 void OBSApp::uploadCurrentAppLog() const
 {
 	OBSBasic *basicWindow = static_cast<OBSBasic *>(GetMainWindow());
 
-	basicWindow->UploadLog("obs-studio/logs", GetCurrentLog(), OBS::LogFileType::CurrentAppLog);
+	basicWindow->UploadLog("multistream/logs", GetCurrentLog(), OBS::LogFileType::CurrentAppLog);
 }
 
 void OBSApp::uploadLastCrashLog()

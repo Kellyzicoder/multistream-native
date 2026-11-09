@@ -1,6 +1,6 @@
 include_guard(DIRECTORY)
 
-option(ENABLE_WHATSNEW "Enable WhatsNew dialog" ON)
+option(ENABLE_WHATSNEW "Enable WhatsNew dialog" OFF)
 
 if(ENABLE_WHATSNEW AND TARGET OBS::browser-panels)
   if(OS_MACOS)
