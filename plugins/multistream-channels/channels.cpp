@@ -110,8 +110,9 @@ void save()
 void load()
 {
 	obs_data_t *root = obs_data_create_from_json_file_safe(configFile().c_str(), "bak");
-	if (!root)
+	if (!root) {
 		return;
+	}
 	obs_data_array_t *arr = obs_data_get_array(root, "channels");
 	size_t n = obs_data_array_count(arr);
 	for (size_t i = 0; i < n; i++) {
@@ -132,17 +133,20 @@ void load()
 // Status changes come from the streaming threads: the label is changed on the screen's thread
 void setStatus(Channel *c, const std::string &s)
 {
-	if (!dock)
+	if (!dock) {
 		return;
+	}
 	QMetaObject::invokeMethod(
 		dock,
 		[c, s]() {
 			for (auto &x : channels) {
-				if (x.get() != c)
+				if (x.get() != c) {
 					continue;
+				}
 				c->status = s;
-				if (c->statusLabel)
+				if (c->statusLabel) {
 					c->statusLabel->setText(QString::fromStdString(s));
+				}
 			}
 		},
 		Qt::QueuedConnection);
@@ -173,16 +177,18 @@ void onStop(void *data, calldata_t *cd)
 	}
 	const char *err = c->out ? obs_output_get_last_error(c->out) : nullptr;
 	std::string msg = "Stopped";
-	if (code == OBS_OUTPUT_BAD_PATH)
+	if (code == OBS_OUTPUT_BAD_PATH) {
 		msg = "Stopped: wrong server address";
-	else if (code == OBS_OUTPUT_CONNECT_FAILED)
+	} else if (code == OBS_OUTPUT_CONNECT_FAILED) {
 		msg = "Stopped: could not connect";
-	else if (code == OBS_OUTPUT_INVALID_STREAM)
+	} else if (code == OBS_OUTPUT_INVALID_STREAM) {
 		msg = "Stopped: the stream key was refused";
-	else if (code == OBS_OUTPUT_DISCONNECTED)
+	} else if (code == OBS_OUTPUT_DISCONNECTED) {
 		msg = "Stopped: the connection was lost";
-	if (err && *err)
+	}
+	if (err && *err) {
 		msg += std::string(" (") + err + ")";
+	}
 	setStatus(c, msg);
 }
 
@@ -204,8 +210,9 @@ void connectSignals(Channel *c, bool on)
 
 void stopChannel(Channel *c)
 {
-	if (!c->out)
+	if (!c->out) {
 		return;
+	}
 	connectSignals(c, false);
 	obs_output_stop(c->out);
 	obs_output_release(c->out);
@@ -219,8 +226,9 @@ void stopChannel(Channel *c)
 void startAll()
 {
 	obs_output_t *mainOut = obs_frontend_get_streaming_output();
-	if (!mainOut)
+	if (!mainOut) {
 		return;
+	}
 	obs_encoder_t *venc = obs_output_get_video_encoder(mainOut);
 	obs_encoder_t *aenc = obs_output_get_audio_encoder(mainOut, 0);
 	obs_output_release(mainOut);
@@ -231,8 +239,9 @@ void startAll()
 
 	for (auto &cp : channels) {
 		Channel *c = cp.get();
-		if (!c->on || c->out)
+		if (!c->on || c->out) {
 			continue;
+		}
 		if (c->server.empty() || c->key.empty()) {
 			setStatus(c, "Not started: add the server and stream key");
 			continue;
@@ -273,8 +282,9 @@ void startAll()
 
 void stopAll()
 {
-	for (auto &c : channels)
+	for (auto &c : channels) {
 		stopChannel(c.get());
+	}
 }
 
 void rebuildList();
@@ -289,10 +299,12 @@ bool editChannel(Channel *c, bool isNew)
 
 	auto *name = new QLineEdit(QString::fromStdString(c->name));
 	auto *kind = new QComboBox();
-	for (const Preset &p : PRESETS)
+	for (const Preset &p : PRESETS) {
 		kind->addItem(p.name);
-	if (!c->kind.empty())
+	}
+	if (!c->kind.empty()) {
 		kind->setCurrentText(QString::fromStdString(c->kind));
+	}
 	auto *server = new QLineEdit(QString::fromStdString(c->server));
 	auto *key = new QLineEdit(QString::fromStdString(c->key));
 	key->setEchoMode(QLineEdit::Password);
@@ -300,15 +312,19 @@ bool editChannel(Channel *c, bool isNew)
 	QObject::connect(show, &QCheckBox::toggled, key,
 			 [key](bool b) { key->setEchoMode(b ? QLineEdit::Normal : QLineEdit::Password); });
 	QObject::connect(kind, &QComboBox::currentIndexChanged, server, [server, name, kind](int i) {
-		if (i < 0 || static_cast<size_t>(i) >= sizeof(PRESETS) / sizeof(PRESETS[0]))
+		if (i < 0 || static_cast<size_t>(i) >= sizeof(PRESETS) / sizeof(PRESETS[0])) {
 			return;
-		if (*PRESETS[i].server)
+		}
+		if (*PRESETS[i].server) {
 			server->setText(PRESETS[i].server);
-		if (name->text().isEmpty())
+		}
+		if (name->text().isEmpty()) {
 			name->setText(kind->currentText());
+		}
 	});
-	if (isNew && server->text().isEmpty())
+	if (isNew && server->text().isEmpty()) {
 		server->setText(PRESETS[0].server);
+	}
 
 	form->addRow("Name", name);
 	form->addRow("Where", kind);
@@ -320,11 +336,13 @@ bool editChannel(Channel *c, bool isNew)
 	QObject::connect(buttons, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
 	form->addRow(buttons);
 
-	if (dlg.exec() != QDialog::Accepted)
+	if (dlg.exec() != QDialog::Accepted) {
 		return false;
+	}
 	c->name = name->text().trimmed().toStdString();
-	if (c->name.empty())
+	if (c->name.empty()) {
 		c->name = kind->currentText().toStdString();
+	}
 	c->kind = kind->currentText().toStdString();
 	c->server = server->text().trimmed().toStdString();
 	c->key = key->text().trimmed().toStdString();
@@ -333,11 +351,13 @@ bool editChannel(Channel *c, bool isNew)
 
 void rebuildList()
 {
-	if (!listBox)
+	if (!listBox) {
 		return;
+	}
 	while (QLayoutItem *it = listBox->takeAt(0)) {
-		if (it->widget())
+		if (it->widget()) {
 			it->widget()->deleteLater();
+		}
 		delete it;
 	}
 
@@ -360,10 +380,11 @@ void rebuildList()
 			c->on = b;
 			save();
 			// switched on while live: it joins straight away; switched off: it stops
-			if (streaming && b)
+			if (streaming && b) {
 				startAll();
-			else if (!b)
+			} else if (!b) {
 				stopChannel(c);
+			}
 		});
 
 		auto *st = new QLabel(QString::fromStdString(c->status));
@@ -373,7 +394,8 @@ void rebuildList()
 		auto *edit = new QPushButton("Edit");
 		QObject::connect(edit, &QPushButton::clicked, edit, [c]() {
 			if (c->out) {
-				QMessageBox::information(dock, "Channel is live", "Stop this channel first, then change it.");
+				QMessageBox::information(dock, "Channel is live",
+							 "Stop this channel first, then change it.");
 				return;
 			}
 			if (editChannel(c, false)) {
@@ -386,8 +408,9 @@ void rebuildList()
 		QObject::connect(del, &QPushButton::clicked, del, [c]() {
 			if (QMessageBox::question(dock, "Remove channel",
 						  QString("Remove %1?").arg(QString::fromStdString(c->name))) !=
-			    QMessageBox::Yes)
+			    QMessageBox::Yes) {
 				return;
+			}
 			stopChannel(c);
 			for (auto it = channels.begin(); it != channels.end(); ++it) {
 				if (it->get() == c) {
@@ -409,8 +432,9 @@ void rebuildList()
 
 void createDock()
 {
-	if (dock)
+	if (dock) {
 		return;
+	}
 	auto *w = new QWidget();
 	auto *v = new QVBoxLayout(w);
 
@@ -426,8 +450,9 @@ void createDock()
 	auto *add = new QPushButton("Add channel");
 	QObject::connect(add, &QPushButton::clicked, add, []() {
 		auto c = std::make_unique<Channel>();
-		if (!editChannel(c.get(), true))
+		if (!editChannel(c.get(), true)) {
 			return;
+		}
 		channels.push_back(std::move(c));
 		save();
 		rebuildList();
