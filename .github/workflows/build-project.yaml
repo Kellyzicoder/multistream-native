@@ -161,15 +161,15 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: ${{ fromJSON(needs.check-event.outputs.package) }}
         with:
-          name: obs-studio-macos-${{ matrix.target }}-${{ needs.check-event.outputs.commitHash }}
-          path: ${{ github.workspace }}/build_macos/obs-studio-*-macos-${{ steps.setup.outputs.cpuName }}.*
+          name: multistream-macos-${{ matrix.target }}-${{ needs.check-event.outputs.commitHash }}
+          path: ${{ github.workspace }}/build_macos/multistream-*-macos-${{ steps.setup.outputs.cpuName }}.*
 
       - name: Upload Debug Symbol Artifacts 🪲
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: ${{ needs.check-event.outputs.config == 'Release' }}
         with:
-          name: obs-studio-macos-${{ matrix.target }}-${{ needs.check-event.outputs.commitHash }}-dSYMs
-          path: ${{ github.workspace }}/build_macos/obs-studio-*-macos-${{ steps.setup.outputs.cpuName }}-dSYMs.tar.xz
+          name: multistream-macos-${{ matrix.target }}-${{ needs.check-event.outputs.commitHash }}-dSYMs
+          path: ${{ github.workspace }}/build_macos/multistream-*-macos-${{ steps.setup.outputs.cpuName }}-dSYMs.tar.xz
 
       - uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         if: github.event_name != 'pull_request' && steps.xcode-cache.outputs.cache-hit != 'true'
@@ -230,21 +230,21 @@ jobs:
         if: ${{ fromJSON(needs.check-event.outputs.package) }}
         with:
           name: obs-studio-${{ matrix.os }}-sources-${{ needs.check-event.outputs.commitHash }}
-          path: ${{ github.workspace }}/build_ubuntu/obs-studio-*-sources.*
+          path: ${{ github.workspace }}/build_ubuntu/multistream-*-sources.*
 
       - name: Upload Artifacts 📡
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: ${{ fromJSON(needs.check-event.outputs.package) }}
         with:
           name: obs-studio-${{ matrix.os }}-x86_64-${{ needs.check-event.outputs.commitHash }}
-          path: ${{ github.workspace }}/build_ubuntu/obs-studio-*-x86_64-ubuntu-gnu.*
+          path: ${{ github.workspace }}/build_ubuntu/multistream-*-x86_64-ubuntu-gnu.*
 
       - name: Upload Debug Symbol Artifacts 🪲
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: ${{ fromJSON(needs.check-event.outputs.package) }}
         with:
           name: obs-studio-${{ matrix.os }}-x86_64-${{ needs.check-event.outputs.commitHash }}-dbgsym
-          path: ${{ github.workspace }}/build_ubuntu/obs-studio-*-x86_64-ubuntu-gnu-dbgsym.ddeb
+          path: ${{ github.workspace }}/build_ubuntu/multistream-*-x86_64-ubuntu-gnu-dbgsym.ddeb
 
       - uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'

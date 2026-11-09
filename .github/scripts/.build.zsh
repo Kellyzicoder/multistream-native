@@ -200,9 +200,9 @@ build() {
         } else {
           run_xcodebuild ${build_args}
 
-          rm -rf OBS.app
-          mkdir OBS.app
-          ditto frontend/${config}/OBS.app OBS.app
+          rm -rf Multistream.app
+          mkdir Multistream.app
+          ditto frontend/${config}/Multistream.app Multistream.app
         }
       }
       popd
