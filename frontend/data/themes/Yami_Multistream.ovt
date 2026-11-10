@@ -92,3 +92,117 @@
     background-color: rgb(210,40,52);
     border-color: rgb(210,40,52);
 }
+
+/* ---------- Multistream sidebar and pages ---------- */
+
+#msSidebar {
+    background-color: var(--grey7);
+    border: none;
+    border-right: 1px solid var(--grey5);
+    spacing: 0px;
+    padding: 0px;
+}
+
+#msBrand {
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 4px 8px;
+}
+
+QPushButton#msNavButton {
+    text-align: left;
+    padding: 9px 14px;
+    min-width: 170px;
+    border: none;
+    border-radius: 10px;
+    background-color: transparent;
+    color: var(--grey1);
+    font-size: 14px;
+}
+
+QPushButton#msNavButton:hover {
+    background-color: var(--grey5);
+    color: #ffffff;
+}
+
+QPushButton#msNavButton:checked {
+    background-color: rgba(240,128,30,0.18);
+    color: var(--primary_light);
+    font-weight: bold;
+}
+
+#msLiveChip {
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid var(--grey4);
+    color: var(--grey1);
+    font-weight: bold;
+}
+
+#msLiveChip[live="true"] {
+    background-color: rgb(210,40,52);
+    border-color: rgb(210,40,52);
+    color: #ffffff;
+}
+
+#msPages {
+    background-color: var(--grey6);
+}
+
+#msPageTitle {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#msCard {
+    background-color: var(--grey7);
+    border: 1px solid var(--grey5);
+    border-radius: 16px;
+}
+
+#msCardTitle {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    padding-bottom: 6px;
+}
+
+#msMuted, #msMainChannel {
+    color: var(--grey1);
+}
+
+#msGoState {
+    color: var(--grey1);
+    font-weight: bold;
+    padding-right: 10px;
+}
+
+QPushButton#msGoButton {
+    background-color: var(--primary);
+    border: none;
+    border-radius: 18px;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 9px 22px;
+}
+
+QPushButton#msGoButton:hover {
+    background-color: var(--primary_light);
+}
+
+QPushButton#msGoButton[live="true"] {
+    background-color: rgb(210,40,52);
+}
+
+QListWidget#msList {
+    background: transparent;
+    border: none;
+}
+
+QListWidget#msList::item {
+    padding: 10px 6px;
+    border-bottom: 1px solid var(--grey5);
+}

@@ -1240,6 +1240,9 @@ void OBSBasic::OBSInit()
 	UpdatePreviewProgramIndicators();
 	OnFirstLoad();
 
+	// Multistream: sidebar and pages
+	MultistreamSetup();
+
 	if (!hideWindowOnStart) {
 		activateWindow();
 	}
@@ -2049,6 +2052,7 @@ void OBSBasic::OnEvent(enum obs_frontend_event event)
 	if (api) {
 		api->on_event(event);
 	}
+	MultistreamEvent(event);
 }
 
 OBSPromptResult OBSBasic::PromptForName(const OBSPromptRequest &request, const OBSPromptCallback &callback)
