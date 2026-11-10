@@ -30,7 +30,8 @@ macro(check_obs_browser)
       # Multistream: on a Mac the browser engine looks for "<app name> Helper" next to the app,
       # with an ID that starts with the app's ID. The app is called Multistream, so the helpers are too.
       if(OS_MACOS)
-        foreach(_ms_helper IN ITEMS "::" " (GPU):_gpu:.gpu" " (Plugin):_plugin:.plugin" " (Renderer):_renderer:.renderer")
+        set(_ms_helpers "::" " (GPU):_gpu:.gpu" " (Plugin):_plugin:.plugin" " (Renderer):_renderer:.renderer")
+        foreach(_ms_helper IN LISTS _ms_helpers)
           string(REPLACE ":" ";" _ms_helper "${_ms_helper}")
           list(GET _ms_helper 0 _ms_name)
           list(GET _ms_helper 1 _ms_target)
