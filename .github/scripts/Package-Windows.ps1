@@ -44,7 +44,7 @@ function Package {
 
     Install-BuildDependencies -WingetFile "${ScriptHome}/.Wingetfile"
 
-    $GitDescription = Invoke-External git describe --tags --long
+    $GitDescription = Invoke-External git describe --tags --long --match "[0-9]*.[0-9]*.[0-9]*"
     $Tokens = ($GitDescription -split '-')
     $CommitVersion = $Tokens[0..$($Tokens.Count - 3)] -join '-'
     $CommitHash = $($Tokens[-1]).SubString(1)
