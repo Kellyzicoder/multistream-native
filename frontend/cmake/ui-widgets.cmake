@@ -25,6 +25,7 @@ target_sources(
     widgets/OBSBasic_Hotkeys.cpp
     widgets/OBSBasic_Icons.cpp
     widgets/OBSBasic_MainControls.cpp
+    widgets/OBSBasic_Multistream.cpp
     widgets/OBSBasic_OutputHandler.cpp
     widgets/OBSBasic_Preview.cpp
     widgets/OBSBasic_Profiles.cpp

@@ -1,0 +1,54 @@
+name: Multistream Release
+# Every merge into multistream-main makes a public release: the Mac and Windows downloads.
+# The app checks this for updates (newest "build-N").
+on:
+  push:
+    branches: [multistream-main]
+permissions:
+  contents: write
+concurrency:
+  group: multistream-release
+  cancel-in-progress: false
+jobs:
+  build:
+    name: Build 🧱
+    uses: ./.github/workflows/build-project.yaml
+    secrets: inherit
+    permissions:
+      contents: read
+  release:
+    name: Release 📦
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Get the downloads
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: '{multistream-macos-*,obs-studio-windows-*,multistream-windows-*}'
+      - name: Make the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          find artifacts -type f | sed 's/^/  /'
+          mkdir -p out
+          for f in $(find artifacts -type f \( -name '*.dmg' -o -name '*.zip' \) ! -iname '*dsym*' ! -iname '*pdb*'); do
+            name=$(basename "$f")
+            case "$name" in
+              *macos-arm64*) to="Multistream-Mac-Apple-chip.dmg" ;;
+              *macos-x86_64*) to="Multistream-Mac-Intel.dmg" ;;
+              *windows-x64*) to="Multistream-Windows.zip" ;;
+              *windows-arm64*) to="Multistream-Windows-ARM.zip" ;;
+              *) to="$name" ;;
+            esac
+            cp "$f" "out/$to"
+          done
+          ls -la out
+          tag="build-${{ github.run_number }}"
+          gh release create "$tag" out/* \
+            --repo "${{ github.repository }}" \
+            --target "${{ github.sha }}" \
+            --title "Multistream build ${{ github.run_number }}" \
+            --notes "Mac (Apple chip or Intel) and Windows downloads of Multistream build ${{ github.run_number }}." \
+            --latest
