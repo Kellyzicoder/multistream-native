@@ -9,36 +9,43 @@
 }
 
 @OBSThemeVars {
+    /* the same colours as the Multistream app (navy, with orange) */
     --grey1: rgb(163,171,196);
-    --grey2: rgb(110,118,150);
+    --grey2: rgb(138,147,173);
     --grey3: rgb(44,53,96);
     --grey4: rgb(29,37,70);
-    --grey5: rgb(26,33,66);
+    --grey5: rgb(34,42,74);
     --grey6: rgb(16,21,46);
     --grey7: rgb(11,16,38);
     --grey8: rgb(10,14,31);
 
-    --primary: rgb(240,128,30);
-    --primary_light: rgb(247,155,74);
-    --primary_lighter: rgb(252,190,130);
-    --primary_dark: rgb(194,98,15);
-    --primary_darker: rgb(120,60,10);
+    --primary: rgb(251,146,60);
+    --primary_light: rgb(253,186,116);
+    --primary_lighter: rgb(254,215,170);
+    --primary_dark: rgb(234,122,32);
+    --primary_darker: rgb(154,74,18);
+
+    --text: rgb(238,241,248);
+    --text_light: rgb(163,171,196);
 
     --bg_base: var(--grey8);
     --bg_window: var(--grey6);
     --bg_preview: rgb(0,0,0);
 
     --border_color: var(--grey5);
+    --border_radius: 12px;
+    --border_radius_small: 8px;
+    --border_radius_large: 18px;
 
     --input_bg: var(--grey7);
     --input_bg_hover: var(--grey6);
     --input_bg_focus: var(--grey6);
 
-    --list_item_bg_selected: var(--primary);
+    --list_item_bg_selected: rgba(251,146,60,0.22);
     --list_item_bg_hover: var(--grey4);
 
-    --input_border: var(--grey3);
-    --input_border_hover: var(--primary_light);
+    --input_border: var(--grey5);
+    --input_border_hover: var(--grey3);
     --input_border_focus: var(--primary);
 
     --button_bg: var(--grey4);
@@ -50,27 +57,27 @@
     --button_bg_red_hover: rgb(150,34,44);
     --button_bg_red_down: rgb(90,20,26);
 
-    --button_border: var(--grey3);
-    --button_border_hover: var(--primary);
+    --button_border: var(--grey4);
+    --button_border_hover: var(--grey3);
     --button_border_focus: var(--primary);
 
-    --tab_bg: var(--input_bg);
-    --tab_bg_hover: var(--grey3);
+    --tab_bg: var(--grey7);
+    --tab_bg_hover: var(--grey4);
     --tab_bg_down: var(--grey7);
     --tab_bg_disabled: var(--grey6);
 
-    --tab_border: var(--grey3);
-    --tab_border_hover: var(--grey1);
-    --tab_border_focus: var(--grey1);
+    --tab_border: var(--grey5);
+    --tab_border_hover: var(--grey3);
+    --tab_border_focus: var(--primary);
     --tab_border_selected: var(--primary);
 
     --scrollbar_handle: var(--grey3);
     --scrollbar_hover: var(--primary);
     --scrollbar_down: var(--grey4);
-    --scrollbar_border: var(--grey5);
+    --scrollbar_border: transparent;
 
     --toolbutton_bg: var(--grey4);
-    --toolbutton_bg_hover: var(--primary);
+    --toolbutton_bg_hover: var(--grey3);
     --toolbutton_bg_down: var(--primary_dark);
     --toolbutton_bg_disabled: var(--grey6);
 }
@@ -91,6 +98,173 @@
 #streamButton:checked {
     background-color: rgb(210,40,52);
     border-color: rgb(210,40,52);
+}
+
+/* ---------- every window (Settings, Safe Mode, properties, messages ...) in Multistream's look ---------- */
+
+QWidget {
+    font-family: "Inter", "SF Pro Text", "Segoe UI Variable", "Segoe UI", sans-serif;
+}
+
+QDialog, QMessageBox, QMainWindow {
+    background-color: var(--grey8);
+    color: var(--text);
+}
+
+QPushButton {
+    background-color: var(--grey4);
+    border: 1px solid var(--grey4);
+    border-radius: 14px;
+    color: var(--text);
+    padding: 6px 16px;
+    min-height: 18px;
+}
+
+QPushButton:hover {
+    background-color: var(--grey3);
+    border-color: var(--grey3);
+}
+
+QPushButton:pressed {
+    background-color: var(--grey5);
+}
+
+QPushButton:disabled {
+    background-color: var(--grey6);
+    border-color: var(--grey6);
+    color: var(--grey2);
+}
+
+/* the main button of a window (OK, Save, Yes, Run ...) is orange, like in Multistream */
+QPushButton:default {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: #ffffff;
+    font-weight: bold;
+}
+
+QPushButton:default:hover {
+    background-color: var(--primary_light);
+    border-color: var(--primary_light);
+}
+
+QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QDoubleSpinBox, QComboBox, QDateTimeEdit {
+    background-color: var(--grey7);
+    border: 1px solid var(--grey5);
+    border-radius: 12px;
+    color: var(--text);
+    padding: 5px 10px;
+    selection-background-color: var(--primary);
+}
+
+QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus, QComboBox:focus {
+    border-color: var(--primary);
+}
+
+QComboBox QAbstractItemView {
+    background-color: var(--grey6);
+    border: 1px solid var(--grey5);
+    border-radius: 12px;
+    selection-background-color: rgba(251,146,60,0.22);
+}
+
+QGroupBox {
+    background-color: var(--grey6);
+    border: 1px solid var(--grey5);
+    border-radius: 18px;
+    margin-top: 18px;
+    padding: 14px 12px 10px 12px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 14px;
+    padding: 0 4px;
+    color: var(--text);
+    font-weight: bold;
+}
+
+QTabBar::tab {
+    background-color: transparent;
+    border: 1px solid var(--grey5);
+    border-radius: 14px;
+    padding: 6px 14px;
+    margin: 2px;
+    color: var(--grey1);
+}
+
+QTabBar::tab:selected {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: #ffffff;
+}
+
+QTabWidget::pane {
+    border: 1px solid var(--grey5);
+    border-radius: 18px;
+    background-color: var(--grey6);
+}
+
+QListWidget, QListView, QTreeView, QTableView {
+    background-color: var(--grey6);
+    border: 1px solid var(--grey5);
+    border-radius: 14px;
+    color: var(--text);
+}
+
+QListWidget::item:selected, QListView::item:selected, QTreeView::item:selected, QTableView::item:selected {
+    background-color: rgba(251,146,60,0.22);
+    color: var(--text);
+}
+
+QMenu {
+    background-color: var(--grey6);
+    border: 1px solid var(--grey5);
+    border-radius: 12px;
+    padding: 6px;
+}
+
+QMenu::item {
+    border-radius: 8px;
+    padding: 6px 18px;
+}
+
+QMenu::item:selected {
+    background-color: rgba(251,146,60,0.22);
+}
+
+QToolTip {
+    background-color: var(--grey4);
+    color: var(--text);
+    border: 1px solid var(--grey3);
+    border-radius: 8px;
+    padding: 6px 8px;
+}
+
+QCheckBox::indicator:checked, QRadioButton::indicator:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+QSlider::sub-page:horizontal {
+    background-color: var(--primary);
+    border-radius: 3px;
+}
+
+QSlider::handle:horizontal {
+    background-color: #ffffff;
+    border-radius: 7px;
+}
+
+QDockWidget {
+    color: var(--text);
+}
+
+QDockWidget::title {
+    background-color: var(--grey6);
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    padding: 8px 12px;
 }
 
 /* ---------- Multistream sidebar and pages ---------- */
@@ -127,7 +301,7 @@ QPushButton#msNavButton:hover {
 }
 
 QPushButton#msNavButton:checked {
-    background-color: rgba(240,128,30,0.18);
+    background-color: rgba(251,146,60,0.18);
     color: var(--primary_light);
     font-weight: bold;
 }
