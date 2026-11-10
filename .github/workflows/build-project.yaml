@@ -1,6 +1,9 @@
 name: Build Project
 on:
   workflow_call:
+env:
+  # Multistream: release builds (from multistream-main) carry their build number, so the app can tell when a newer one is out
+  MULTISTREAM_BUILD: ${{ (github.event_name == 'push' && github.ref_name == 'multistream-main') && github.run_number || '0' }}
 jobs:
   check-event:
     name: Event Data 🔎

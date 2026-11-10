@@ -12,10 +12,12 @@
 #include "OBSQTDisplay.hpp"
 
 #include <components/Multiview.hpp>
+#include <utility/RemoteTextThread.hpp>
 #include <utility/display-helpers.hpp>
 
 #include <obs-frontend-api.h>
 
+#include <QApplication>
 #include <QButtonGroup>
 #include <QDateTime>
 #include <QDesktopServices>
@@ -26,6 +28,8 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QListWidget>
+#include <QMessageBox>
+#include <QPointer>
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QStyle>
@@ -34,8 +38,15 @@
 #include <QUrl>
 #include <QVBoxLayout>
 
+#include <cstdlib>
 #include <cstring>
 #include <string>
+#include <thread>
+#include <vector>
+
+#ifndef MULTISTREAM_BUILD
+#define MULTISTREAM_BUILD 0
+#endif
 
 class MultistreamPages;
 
@@ -614,6 +625,65 @@ void MultistreamPages::UpdateMultiview()
 	obs_leave_graphics();
 }
 
+/* ---------- updates ---------- */
+
+// A few seconds after start, the app asks GitHub for the newest Multistream build.
+// If it is newer than this one, a note offers the download page (like the old app did).
+// Test builds (build 0) never ask.
+static void MsCheckForUpdate(OBSBasic *basic)
+{
+	if (MULTISTREAM_BUILD <= 0) {
+		return;
+	}
+	QPointer<OBSBasic> win(basic);
+	std::thread([win]() {
+		std::string body, error;
+		long code = 0;
+		std::vector<std::string> headers = {"Accept: application/vnd.github+json"};
+		bool ok = GetRemoteFile("https://api.github.com/repos/Kellyzicoder/multistream-native/releases/latest",
+					body, error, &code, nullptr, "", nullptr, headers, nullptr, 15);
+		if (!ok || code != 200) {
+			return;
+		}
+		OBSDataAutoRelease data = obs_data_create_from_json(body.c_str());
+		if (!data) {
+			return;
+		}
+		std::string tag = obs_data_get_string(data, "tag_name");
+		std::string page = obs_data_get_string(data, "html_url");
+		if (tag.rfind("build-", 0) != 0 || page.empty()) {
+			return;
+		}
+		long latest = std::strtol(tag.c_str() + 6, nullptr, 10);
+		if (latest <= MULTISTREAM_BUILD) {
+			return;
+		}
+
+		QMetaObject::invokeMethod(
+			qApp,
+			[win, latest, page]() {
+				if (!win) {
+					return;
+				}
+				QMessageBox box(win);
+				box.setWindowTitle("Update");
+				box.setText("A new version of Multistream is ready.");
+				box.setInformativeText(
+					QString("You have build %1. The new one is build %2. Download it, "
+						"then open it to replace this one.")
+						.arg(MULTISTREAM_BUILD)
+						.arg(latest));
+				QPushButton *open = box.addButton("Open download page", QMessageBox::AcceptRole);
+				box.addButton("Later", QMessageBox::RejectRole);
+				box.exec();
+				if (box.clickedButton() == open) {
+					QDesktopServices::openUrl(QUrl(QString::fromStdString(page)));
+				}
+			},
+			Qt::QueuedConnection);
+	}).detach();
+}
+
 /* ---------- OBSBasic hooks ---------- */
 
 void OBSBasic::MultistreamSetup()
@@ -623,6 +693,7 @@ void OBSBasic::MultistreamSetup()
 	}
 	msPages = new MultistreamPages(this);
 	msPages->Build();
+	QTimer::singleShot(8000, this, [this]() { MsCheckForUpdate(this); });
 }
 
 void OBSBasic::MultistreamEvent(enum obs_frontend_event event)

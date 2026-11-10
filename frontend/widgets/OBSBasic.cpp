@@ -1985,9 +1985,13 @@ void OBSBasic::UpdateTitleBar()
 	const char *profile = config_get_string(App()->GetUserConfig(), "Basic", "Profile");
 	const char *sceneCollection = config_get_string(App()->GetUserConfig(), "Basic", "SceneCollection");
 
-	name << "Multistream ";
-
-	name << App()->GetVersionString(false);
+#ifndef MULTISTREAM_BUILD
+#define MULTISTREAM_BUILD 0
+#endif
+	if (MULTISTREAM_BUILD > 0)
+		name << "Multistream build " << MULTISTREAM_BUILD;
+	else
+		name << "Multistream (test build)";
 	if (safe_mode) {
 		name << " (" << Str("TitleBar.SafeMode") << ")";
 	}
