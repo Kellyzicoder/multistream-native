@@ -66,7 +66,7 @@
 using State = OBS::PluginManager::State;
 using ModuleType = obs_runtime_module_type;
 
-constexpr std::string_view kPluginPathSuffix{"obs-studio/plugins/%module%"};
+constexpr std::string_view kPluginPathSuffix{"multistream/plugins/%module%"};
 constexpr std::string_view kUserPluginPathSuffix{"/%module%"};
 constexpr std::string_view kPortablePluginPath{"../../plugins/%module%"};
 

@@ -118,13 +118,13 @@ package() {
 
   local output_name
   if (( commit_distance > 0 )) {
-    output_name="obs-studio-${commit_version}-${commit_hash}"
+    output_name="multistream-${commit_version}-${commit_hash}"
   } else {
-    output_name="obs-studio-${commit_version}"
+    output_name="multistream-${commit_version}"
   }
 
   if [[ ${host_os} == macos ]] {
-    if [[ ! -d build_macos/OBS.app ]] {
+    if [[ ! -d build_macos/Multistream.app ]] {
       log_error 'No application bundle found. Run the build script to create a valid application bundle.'
       return 0
     }
@@ -134,9 +134,9 @@ package() {
 
     local volume_name
     if (( commit_distance > 0 )) {
-      volume_name="OBS Studio ${commit_version}-${commit_hash} (${arch_names[${target##*-}]})"
+      volume_name="Multistream ${commit_version}-${commit_hash} (${arch_names[${target##*-}]})"
     } else {
-      volume_name="OBS Studio ${commit_version} (${arch_names[${target##*-}]})"
+      volume_name="Multistream ${commit_version} (${arch_names[${target##*-}]})"
     }
 
     if (( package )) {
@@ -147,8 +147,8 @@ package() {
       cp ${project_root}/cmake/macos/resources/AppIcon.icns obs-studio/.VolumeIcon.icns
       ln -s /Applications obs-studio/Applications
 
-      mkdir -p obs-studio/OBS.app
-      ditto OBS.app obs-studio/OBS.app
+      mkdir -p obs-studio/Multistream.app
+      ditto Multistream.app obs-studio/Multistream.app
 
       local -i _status=0
 
@@ -188,7 +188,7 @@ package() {
     } else {
       log_group "Archiving obs-studio..."
       pushd build_macos
-      XZ_OPT=-T0 tar -cvJf ${output_name}.tar.xz OBS.app
+      XZ_OPT=-T0 tar -cvJf ${output_name}.tar.xz Multistream.app
       popd
     }
 

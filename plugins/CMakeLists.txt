@@ -71,6 +71,12 @@ add_core_module(
     WITH_MESSAGE
 )
 add_core_module(image-source)
+# Multistream: go live on many channels at once
+add_core_module(
+    multistream-channels
+    PLATFORMS WINDOWS MACOS LINUX
+    WITH_MESSAGE
+)
 add_core_module(linux-alsa PLATFORMS LINUX FREEBSD OPENBSD)
 add_core_module(linux-capture PLATFORMS LINUX FREEBSD OPENBSD)
 add_core_module(linux-jack PLATFORMS LINUX FREEBSD OPENBSD)
