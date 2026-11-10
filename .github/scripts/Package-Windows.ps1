@@ -51,9 +51,9 @@ function Package {
     $CommitDistance = $Tokens[-2]
 
     if ( $CommitDistance -gt 0 ) {
-        $OutputName = "obs-studio-${CommitVersion}-${CommitHash}"
+        $OutputName = "multistream-${CommitVersion}-${CommitHash}"
     } else {
-        $OutputName = "obs-studio-${CommitVersion}"
+        $OutputName = "multistream-${CommitVersion}"
     }
 
     $CpackArgs = @(

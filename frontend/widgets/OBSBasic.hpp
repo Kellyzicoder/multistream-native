@@ -185,6 +185,8 @@ static inline void ClearProcessPriority()
 	} while (false)
 #endif
 
+class MultistreamPages;
+
 class OBSBasic : public OBSMainWindow {
 	Q_OBJECT
 	Q_PROPERTY(QIcon imageIcon READ GetImageIcon WRITE SetImageIcon DESIGNABLE true)
@@ -265,6 +267,12 @@ private:
 	std::unique_ptr<Ui::OBSBasic> ui;
 
 	void OnEvent(enum obs_frontend_event event);
+
+	/* Multistream: the sidebar and its pages (OBSBasic_Multistream.cpp) */
+	friend class MultistreamPages;
+	MultistreamPages *msPages = nullptr;
+	void MultistreamSetup();
+	void MultistreamEvent(enum obs_frontend_event event);
 
 	bool InitBasicConfigDefaults();
 	void InitBasicConfigDefaults2();

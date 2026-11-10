@@ -31,7 +31,7 @@ sign_append = true
 # PDBs to not strip
 exclude = [
     "obs-frontend-api.pdb",
-    "obs64.pdb",
+    "multistream64.pdb",
     "obs.pdb",
 ]
 
