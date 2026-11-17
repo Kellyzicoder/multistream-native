@@ -64,11 +64,11 @@ function(set_target_properties_obs target)
                    CLANG_ENABLE_OBJC_ARC YES
                    SKIP_INSTALL NO
                    INSTALL_PATH "$(LOCAL_APPS_DIR)"
-                   INFOPLIST_KEY_CFBundleDisplayName "OBS Studio"
+                   INFOPLIST_KEY_CFBundleDisplayName "Multistream"
                    INFOPLIST_KEY_NSHumanReadableCopyright "(c) 2012-${CURRENT_YEAR} Lain Bailey"
-                   INFOPLIST_KEY_NSCameraUsageDescription "OBS needs to access the camera to enable camera sources to work."
-                   INFOPLIST_KEY_NSMicrophoneUsageDescription "OBS needs to access the microphone to enable audio input."
-                   INFOPLIST_KEY_NSAppleEventsUsageDescription "OBS needs to access background events to enable hotkeys while not in focus."
+                   INFOPLIST_KEY_NSCameraUsageDescription "Multistream needs the camera so camera sources work."
+                   INFOPLIST_KEY_NSMicrophoneUsageDescription "Multistream needs the microphone for sound input."
+                   INFOPLIST_KEY_NSAppleEventsUsageDescription "Multistream needs background events so hotkeys work when it is not in front."
       )
 
       get_property(obs_dependencies GLOBAL PROPERTY _OBS_DEPENDENCIES)

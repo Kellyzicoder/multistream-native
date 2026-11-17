@@ -27,6 +27,26 @@ macro(check_obs_browser)
       message(FATAL_ERROR "Required submodule 'obs-browser' not available.")
     else()
       add_core_module(obs-browser)
+      # Multistream: on a Mac the browser engine looks for "<app name> Helper" next to the app,
+      # with an ID that starts with the app's ID. The app is called Multistream, so the helpers are too.
+      if(OS_MACOS)
+        set(_ms_helpers "::" " (GPU):_gpu:.gpu" " (Plugin):_plugin:.plugin" " (Renderer):_renderer:.renderer")
+        foreach(_ms_helper IN LISTS _ms_helpers)
+          string(REPLACE ":" ";" _ms_helper "${_ms_helper}")
+          list(GET _ms_helper 0 _ms_name)
+          list(GET _ms_helper 1 _ms_target)
+          list(GET _ms_helper 2 _ms_id)
+          if(TARGET browser-helper${_ms_target})
+            set_target_properties(
+              browser-helper${_ms_target}
+              PROPERTIES
+                OUTPUT_NAME "Multistream Helper${_ms_name}"
+                XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER com.multistream.native.helper${_ms_id}
+                XCODE_ATTRIBUTE_INFOPLIST_KEY_CFBundleDisplayName "Multistream Helper${_ms_name}"
+            )
+          endif()
+        endforeach()
+      endif()
     endif()
   else()
     add_custom_target(obs-browser)
